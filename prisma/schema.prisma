@@ -1,0 +1,77 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    directUrl= env("DIRECT_URL")
+}
+
+model User {
+    id        String   @id @db.Uuid
+    email     String   @unique
+    name      String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    enti      EnteUser[]
+}
+
+model Ente {
+    id        String    @id @default(uuid()) @db.Uuid
+    name      String
+    domain    String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    users     EnteUser[]
+    scans     Scan[]    // Un Ente ha molte scansioni
+    reports   Report[]  // un Ente ha molti report
+}
+
+model EnteUser {
+    userId String @db.Uuid
+    enteId String @db.Uuid
+    role   String @default("MEMBER")
+
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    ente   Ente @relation(fields: [enteId], references: [id], onDelete: Cascade)
+
+    @@id([userId, enteId])
+}
+
+model Scan {
+    id          String   @id @default(uuid()) @db.Uuid
+    enteId      String   @db.Uuid
+    url         String   //L'URL specifico di questa scansione
+    status      String   @default("COMPLETED") // PENDING, COMPLETED, FAILED
+    score       Int?     // Punteggio percentuale calcolato   
+    createdAt   DateTime @default(now())
+
+    ente        Ente     @relation(fields: [enteId], references: [id], onDelete: Cascade)
+    issues      Issue[]
+}
+
+model Issue {
+  id          String   @id @default(uuid()) @db.Uuid
+  scanId      String   @db.Uuid
+  element     String   // Selettore CSS o HTML del problema
+  description String   // Descrizione dal tool (axe-core)
+  impact      String   // minor, moderate, serious, critical
+  ruleId      String   // Codice regola WCAG (es. color-contrast)
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  scan        Scan     @relation(fields: [scanId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id        String   @id @default(uuid()) @db.Uuid
+  enteId    String   @db.Uuid
+  title     String   // Es. "Report Accessibilità Q1 2024"
+  fileUrl   String?  // Riferimento al file PDF nello storage Supabase
+  createdAt DateTime @default(now())
+
+  ente      Ente     @relation(fields: [enteId], references: [id], onDelete: Cascade)
+}
