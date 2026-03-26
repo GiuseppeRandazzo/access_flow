@@ -9,7 +9,10 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@prisma/client": "6.0.0",
     "prettier": "^3.7.4",
+    "prisma": "6.0.0",
+    "supabase": "^2.84.4",
     "turbo": "^2.8.17",
     "typescript": "5.9.2"
   },
