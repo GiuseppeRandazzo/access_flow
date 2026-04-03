@@ -1,6 +1,10 @@
 import { login, signup } from "./actions";
+import { Input } from "@repo/ui/input";
+import ServerButton from "@repo/ui/server-button";
+import { Alert } from "@repo/ui/alert";
 
 export default function LoginPage() {
+  // Qui tra poco aggiungeremo la gestione errori
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
@@ -9,6 +13,8 @@ export default function LoginPage() {
           <p className="text-sm text-gray-500 mt-2">Accedi o crea un account</p>
         </div>
 
+        {/* Qui tra poco aggiungeremo l'Alert per errori */}
+
         <form className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label
@@ -16,13 +22,13 @@ export default function LoginPage() {
               className="text-sm font-medium text-gray-700">
               Email
             </label>
-            <input
+            <Input
               id="email"
               name="email"
               type="email"
               required
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="tu@ente.it"
+              autoComplete="email"
             />
           </div>
 
@@ -32,26 +38,28 @@ export default function LoginPage() {
               className="text-sm font-medium text-gray-700">
               Password
             </label>
-            <input
+            <Input
               id="password"
               name="password"
               type="password"
               required
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="current-password"
             />
           </div>
 
           <div className="flex flex-col gap-3 mt-4">
-            <button
+            <ServerButton
               formAction={login}
-              className="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md font-medium transition-colors">
+              className="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md font-medium transition-colors"
+              type="submit">
               Accedi
-            </button>
-            <button
+            </ServerButton>
+            <ServerButton
               formAction={signup}
-              className="w-full px-4 py-2 text-blue-600 bg-white border border-blue-600 hover:bg-blue-50 rounded-md font-medium transition-colors">
+              className="w-full px-4 py-2 text-blue-600 bg-white border border-blue-600 hover:bg-blue-50 rounded-md font-medium transition-colors"
+              type="submit">
               Registrati
-            </button>
+            </ServerButton>
           </div>
         </form>
       </div>
