@@ -1,10 +1,15 @@
-import { login, signup } from "./actions";
 import { Input } from "@repo/ui/input";
 import ServerButton from "@repo/ui/server-button";
 import { Alert } from "@repo/ui/alert";
+import { login, signup } from "./actions";
 
-export default function LoginPage() {
-  // Qui tra poco aggiungeremo la gestione errori
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams?: { error?: string };
+}) {
+  const error = searchParams?.error;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
@@ -13,7 +18,11 @@ export default function LoginPage() {
           <p className="text-sm text-gray-500 mt-2">Accedi o crea un account</p>
         </div>
 
-        {/* Qui tra poco aggiungeremo l'Alert per errori */}
+        {error && (
+          <div className="mb-4">
+            <Alert variant="error">{decodeURIComponent(String(error))}</Alert>
+          </div>
+        )}
 
         <form className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
